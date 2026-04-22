@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  automl-api:
+    build: .
+    container_name: automl-agent
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    restart: always

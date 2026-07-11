@@ -4,10 +4,11 @@ Aggregates all v1 endpoint routers into a single APIRouter.
 """
 
 from fastapi import APIRouter
-from api.v1.endpoints import query, dataset, validate, pipeline, model, predict
+from api.v1.endpoints import query, dataset, validate, pipeline, model, predict, agent
 
 api_router = APIRouter(prefix="/api/v1")
 
+api_router.include_router(agent.router)
 api_router.include_router(query.router)
 api_router.include_router(dataset.router)
 api_router.include_router(validate.router)

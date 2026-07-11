@@ -1,7 +1,12 @@
 fastapi
-uvicorn
+uvicorn[standard]
+pydantic-settings
+python-multipart
 pandas
 numpy
 scikit-learn
+flaml[automl]
 joblib
-python-multipart
+openpyxl
+pytest
+httpx

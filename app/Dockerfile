@@ -23,5 +23,7 @@ COPY . .
 # Expose port
 EXPOSE 8000
 
-# Run FastAPI
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run FastAPI.
+# main.py is at /app/main.py and imports top-level modules (core.*, api.*),
+# so the module path is `main:app`, not `app.main:app`.
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

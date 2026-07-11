@@ -28,11 +28,13 @@ class DatasetValidationResult(BaseModel):
 
 
 class DatasetSearchHit(BaseModel):
-    openml_id: int
+    ref: str                         # 'source:native_id' — use this for detail/fetch
+    source: str
     name: str
     confidence: float = 0.0          # ranking score (semantic, else lexical)
     rows: int | None = None
     features: int | None = None
+    openml_id: int | None = None     # only present for OpenML hits
 
 
 class ColumnInfo(BaseModel):
@@ -44,12 +46,13 @@ class ColumnInfo(BaseModel):
 
 
 class DatasetDetail(BaseModel):
-    openml_id: int
+    ref: str
+    source: str
     name: str
     description: str | None = None
     target: str | None = None
     columns: list[ColumnInfo]
 
 
-class OpenMLFetchRequest(BaseModel):
-    openml_id: int
+class FetchRequest(BaseModel):
+    ref: str = Field(..., description="Dataset ref 'source:id', e.g. 'openml:61', 'hf:imdb'")

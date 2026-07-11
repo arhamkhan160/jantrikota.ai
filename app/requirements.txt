@@ -11,5 +11,10 @@ openpyxl
 openai
 langgraph
 openml
+datasets
+huggingface_hub
+kaggle
+kagglehub
+lxml
 pytest
 httpx

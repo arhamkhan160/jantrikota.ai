@@ -64,6 +64,8 @@ def search(query: str, limit: int = 10) -> list[dict]:
     pool = df[mask].head(_POOL)
 
     candidates = [{
+        "ref": f"openml:{int(r['did'])}",
+        "source": "openml",
         "openml_id": int(r["did"]),
         "name": str(r["name"]),
         "rows": int(r["NumberOfInstances"]) if pd.notna(r.get("NumberOfInstances")) else None,
@@ -84,7 +86,8 @@ def search(query: str, limit: int = 10) -> list[dict]:
 
 # ── detail (metadata only) ───────────────────────────────────────────────────
 
-def detail(openml_id: int) -> dict:
+def detail(openml_id) -> dict:
+    openml_id = int(openml_id)
     ds = _get_dataset(openml_id, download_data=False)
     columns = []
     for f in ds.features.values():
@@ -97,6 +100,8 @@ def detail(openml_id: int) -> dict:
             "explanation": None,   # optionally filled by the LLM at the endpoint
         })
     return {
+        "source": "openml",
+        "ref": f"openml:{openml_id}",
         "openml_id": openml_id,
         "name": ds.name,
         "description": ds.description,
@@ -107,8 +112,9 @@ def detail(openml_id: int) -> dict:
 
 # ── fetch full data (on commit) ──────────────────────────────────────────────
 
-def fetch(openml_id: int) -> tuple[pd.DataFrame, str | None]:
+def fetch(openml_id) -> tuple[pd.DataFrame, str | None]:
     """Return (dataframe including target, target_column_name)."""
+    openml_id = int(openml_id)
     ds = _get_dataset(openml_id, download_data=True)
     target = ds.default_target_attribute
     X, y, _, _ = ds.get_data(target=target)

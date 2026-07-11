@@ -1,5 +1,9 @@
 # 🗺️ Build Plan — jantrikota.ai (AutoML Agent)
 
+> **Status (2026-07-11): M0–M6 all shipped and validated — 27/27 tests green in Docker.**
+> Branch `build/automl-mvp`. One commit per milestone (M1→M6). Deferred items below
+> remain intentionally unbuilt (featuretools, Celery, MLflow, UI).
+
 Actionable checklist. Blueprint lives in [Readme.md](Readme.md). Rule: **each milestone RUNS end-to-end before the next starts.** Vertical slices, not horizontal layers. Tick the box only when its acceptance check passes.
 
 Dependency order is strict, top to bottom. Don't build ahead. Don't install a dep before the milestone that needs it.

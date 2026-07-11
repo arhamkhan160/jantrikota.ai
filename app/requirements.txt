@@ -10,5 +10,6 @@ joblib
 openpyxl
 openai
 langgraph
+openml
 pytest
 httpx

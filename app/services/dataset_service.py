@@ -60,6 +60,28 @@ class DatasetService:
             upload_time=datetime.now(UTC),
         )
 
+    def save_dataframe(self, df: pd.DataFrame, name: str,
+                       suggested_target: str | None = None) -> DatasetUploadResponse:
+        """Persist an in-memory frame (e.g. fetched from OpenML) as a dataset."""
+        dataset_id = str(uuid.uuid4())
+        save_path = DATASET_DIR / f"{dataset_id}.csv"
+        df.to_csv(save_path, index=False)
+        (DATASET_DIR / f"{dataset_id}.meta.json").write_text(json.dumps({
+            "dataset_id": dataset_id, "filename": name, "path": str(save_path),
+            "rows": len(df), "columns": len(df.columns),
+        }))
+        return DatasetUploadResponse(
+            dataset_id=dataset_id,
+            filename=name,
+            rows=len(df),
+            columns=len(df.columns),
+            column_names=df.columns.tolist(),
+            dtypes={col: str(dtype) for col, dtype in df.dtypes.items()},
+            missing_values={col: int(df[col].isnull().sum()) for col in df.columns},
+            upload_time=datetime.now(UTC),
+            suggested_target=suggested_target,
+        )
+
     def load_dataset(self, dataset_id: str) -> pd.DataFrame:
         meta_path = DATASET_DIR / f"{dataset_id}.meta.json"
         if not meta_path.exists():

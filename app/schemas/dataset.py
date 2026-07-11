@@ -17,6 +17,7 @@ class DatasetUploadResponse(BaseModel):
     dtypes: dict[str, str]
     missing_values: dict[str, int]
     upload_time: datetime
+    suggested_target: str | None = None   # set when fetched from OpenML (target is labeled)
 
 
 class DatasetValidationResult(BaseModel):
@@ -24,3 +25,14 @@ class DatasetValidationResult(BaseModel):
     errors: list[str] = []
     warnings: list[str] = []
     summary: dict[str, Any] = {}
+
+
+class DatasetSearchHit(BaseModel):
+    openml_id: int
+    name: str
+    rows: int | None = None
+    features: int | None = None
+
+
+class OpenMLFetchRequest(BaseModel):
+    openml_id: int

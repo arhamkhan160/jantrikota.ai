@@ -1,6 +1,16 @@
 import { Button } from './ui/Button'
 
-export default function Nav({ onSignIn }: { onSignIn?: () => void }) {
+type User = { email?: string } | null
+
+export default function Nav({
+  user,
+  onSignIn,
+  onSignOut,
+}: {
+  user?: User
+  onSignIn?: () => void
+  onSignOut?: () => void
+}) {
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       <nav className="glass mx-auto mt-4 flex max-w-6xl items-center justify-between rounded-full px-5 py-3">
@@ -18,7 +28,14 @@ export default function Nav({ onSignIn }: { onSignIn?: () => void }) {
           <a href="#pipeline" className="transition hover:text-ink">Pipeline</a>
         </div>
 
-        <Button variant="ghost" onClick={onSignIn}>Sign in</Button>
+        {user ? (
+          <div className="flex items-center gap-3">
+            <span className="hidden data text-xs text-muted sm:inline">{user.email}</span>
+            <Button variant="ghost" onClick={onSignOut}>Sign out</Button>
+          </div>
+        ) : (
+          <Button variant="ghost" onClick={onSignIn}>Sign in</Button>
+        )}
       </nav>
     </header>
   )

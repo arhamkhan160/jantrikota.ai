@@ -32,6 +32,11 @@ class Settings(BaseSettings):
     LLM_MODEL: str = "gpt-4o-mini"
     LLM_BASE_URL: str = ""              # blank = OpenAI default; set for Groq/OpenRouter
 
+    # ── Embeddings (for semantic dataset-search ranking) ───────────────────
+    EMBED_MODEL: str = "text-embedding-3-small"
+    EMBED_API_KEY: str = ""             # blank = reuse LLM_API_KEY
+    EMBED_BASE_URL: str = ""            # blank = reuse LLM_BASE_URL
+
     # ── CORS ───────────────────────────────────────────────────────────────
     ALLOWED_ORIGINS: list[str] = ["*"]
 

@@ -30,8 +30,25 @@ class DatasetValidationResult(BaseModel):
 class DatasetSearchHit(BaseModel):
     openml_id: int
     name: str
+    confidence: float = 0.0          # ranking score (semantic, else lexical)
     rows: int | None = None
     features: int | None = None
+
+
+class ColumnInfo(BaseModel):
+    name: str
+    type: str | None = None
+    n_missing: int | None = None
+    n_distinct: int | None = None
+    explanation: str | None = None   # LLM prose when a key is configured
+
+
+class DatasetDetail(BaseModel):
+    openml_id: int
+    name: str
+    description: str | None = None
+    target: str | None = None
+    columns: list[ColumnInfo]
 
 
 class OpenMLFetchRequest(BaseModel):

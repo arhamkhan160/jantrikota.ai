@@ -7,9 +7,10 @@ GET  /api/v1/dataset/{dataset_id}/validate — Validate uploaded dataset.
 from fastapi import APIRouter, UploadFile, File, HTTPException, Query
 from schemas.dataset import (
     DatasetUploadResponse, DatasetValidationResult,
-    DatasetSearchHit, OpenMLFetchRequest,
+    DatasetSearchHit, DatasetDetail, ColumnInfo, OpenMLFetchRequest,
 )
 from services.dataset_service import DatasetService
+from services.column_explainer import explain as explain_columns
 from integrations import openml as openml_int
 
 router = APIRouter(prefix="/dataset", tags=["Dataset"])
@@ -28,12 +29,29 @@ async def upload_dataset(file: UploadFile = File(...)) -> DatasetUploadResponse:
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/search", response_model=list[DatasetSearchHit], summary="Search OpenML datasets")
+@router.get("/search", response_model=list[DatasetSearchHit], summary="Search OpenML datasets (ranked)")
 def search_datasets(
-    q: str = Query(..., description="Substring to match against dataset names"),
+    q: str = Query(..., description="Query matched + ranked against dataset names"),
     limit: int = Query(10, ge=1, le=50),
 ) -> list[DatasetSearchHit]:
+    """Ranked top-N. Summary/columns/explanations are deferred to /detail on click."""
     return [DatasetSearchHit(**h) for h in openml_int.search(q, limit)]
+
+
+@router.get("/detail/{openml_id}", response_model=DatasetDetail, summary="Dataset detail (on click)")
+def dataset_detail(openml_id: int) -> DatasetDetail:
+    """Metadata only (no full download): description + columns + optional LLM prose."""
+    try:
+        d = openml_int.detail(openml_id)
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"OpenML detail failed: {e}")
+
+    prose = explain_columns(d["name"], d.get("description"), [c["name"] for c in d["columns"]])
+    columns = [ColumnInfo(**{**c, "explanation": prose.get(c["name"])}) for c in d["columns"]]
+    return DatasetDetail(
+        openml_id=d["openml_id"], name=d["name"],
+        description=d.get("description"), target=d.get("target"), columns=columns,
+    )
 
 
 @router.post("/fetch", response_model=DatasetUploadResponse, summary="Fetch an OpenML dataset")

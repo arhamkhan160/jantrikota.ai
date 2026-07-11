@@ -45,3 +45,18 @@ def complete_json(system: str, user: str, *, model: str | None = None) -> dict:
     )
     content = resp.choices[0].message.content or "{}"
     return json.loads(content)
+
+
+@lru_cache
+def _embed_client() -> OpenAI:
+    key = settings.EMBED_API_KEY or settings.LLM_API_KEY
+    if not key:
+        raise RuntimeError("No embedding key (EMBED_API_KEY / LLM_API_KEY) configured.")
+    base = settings.EMBED_BASE_URL or settings.LLM_BASE_URL or None
+    return OpenAI(api_key=key, base_url=base)
+
+
+def embed(texts: list[str]) -> list[list[float]]:
+    """Embed a batch of texts. Raises RuntimeError if no key (caller falls back)."""
+    resp = _embed_client().embeddings.create(model=settings.EMBED_MODEL, input=texts)
+    return [d.embedding for d in resp.data]

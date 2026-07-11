@@ -46,6 +46,11 @@ def test_interrupts_then_drops_on_user_confirm():
         res = g.invoke(inputs, cfg)
         # Paused for confirmation — the gate approved (constant) but a drop needs the user.
         assert "__interrupt__" in res
+        # The question must carry the LLM reason, gate reason, and real stats evidence.
+        pending = res["__interrupt__"][0].value["proposals"][0]
+        assert pending["reason"] == "constant"
+        assert "gate_reason" in pending
+        assert pending["evidence"]["is_constant"] is True
 
         # Second call re-proposes 'const', but it's gone after apply -> gate rejects -> ends.
         res2 = g.invoke(Command(resume={"const": "drop"}), cfg)

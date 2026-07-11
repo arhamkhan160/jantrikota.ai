@@ -76,11 +76,27 @@ def route_after_gate(state: dict) -> str:
     return "apply"
 
 
+_EVIDENCE_KEYS = ("corr_to_target", "mutual_info", "missing_pct",
+                  "cardinality", "is_constant", "duplicate_of", "leakage_suspect")
+
+
 def ask_user_node(state: dict) -> dict:
-    drops = [p for p in state.get("approved", []) if p["action"] == "drop_column"]
+    cols = state.get("profile", {}).get("columns", {})
+    drops = []
+    for p in state.get("approved", []):
+        if p["action"] != "drop_column":
+            continue
+        stats = cols.get(p["col"], {})
+        # Attach the real numbers so the user sees WHY, not just a claim:
+        #   reason      = the LLM's justification
+        #   gate_reason = why the stats gate allowed the drop
+        #   evidence    = the raw stats behind that decision
+        drops.append({**p, "evidence": {k: stats.get(k) for k in _EVIDENCE_KEYS}})
+
     # Pauses the graph; the endpoint resumes it with {col: "drop"|"keep"}.
     answer = interrupt({
-        "message": "Confirm column drops (statistical evidence attached).",
+        "message": "Confirm column drops. Each carries the LLM reason, the gate "
+                   "reason, and the statistical evidence behind it.",
         "proposals": drops,
     })
     return {"user_decisions": answer or {}}

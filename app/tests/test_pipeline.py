@@ -78,3 +78,11 @@ def test_full_pipeline():
     assert data["status"] == "completed"
     assert data["best_model"] != ""
     assert len(data["all_results"]) > 0
+
+    # 5. Predict with the trained model (reuses the same job — no extra training)
+    predict_resp = client.post(
+        "/api/v1/predict",
+        json={"job_id": job_id, "features": {"feature_a": 0.5, "feature_b": 6.0, "feature_c": -1.0}},
+    )
+    assert predict_resp.status_code == 200
+    assert "prediction" in predict_resp.json()

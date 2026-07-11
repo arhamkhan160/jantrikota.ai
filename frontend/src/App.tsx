@@ -3,6 +3,7 @@ import Nav from './components/Nav'
 import Hero from './components/Hero'
 import AuthModal from './components/AuthModal'
 import DatasetExplorer from './components/DatasetExplorer'
+import AgentRunner from './components/AgentRunner'
 import { useAuth } from './lib/auth'
 
 export default function App() {
@@ -20,7 +21,8 @@ export default function App() {
       <Nav user={user} onSignIn={() => setAuthOpen(true)} onSignOut={logout} />
       <main>
         <Hero onStart={start} />
-        <DatasetExplorer onUse={(ref) => console.log('use dataset', ref)} />
+        <DatasetExplorer onUse={() => document.getElementById('workflow')?.scrollIntoView({ behavior: 'smooth' })} />
+        <AgentRunner onSignIn={() => setAuthOpen(true)} />
       </main>
       <footer className="border-t border-edge py-8 text-center data text-xs text-muted">
         jantrikota.ai — natural-language AutoML · built with an agentic workflow

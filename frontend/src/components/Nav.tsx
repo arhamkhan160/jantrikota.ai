@@ -24,8 +24,7 @@ export default function Nav({
 
         <div className="hidden items-center gap-7 text-sm text-muted md:flex">
           <a href="#datasets" className="transition hover:text-ink">Datasets</a>
-          <a href="#workflow" className="transition hover:text-ink">Workflow</a>
-          <a href="#pipeline" className="transition hover:text-ink">Pipeline</a>
+          <a href="#workflow" className="transition hover:text-ink">Run agent</a>
         </div>
 
         {user ? (

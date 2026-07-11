@@ -27,6 +27,11 @@ class Settings(BaseSettings):
     TIME_BUDGET_SECONDS: int = 30       # FLAML AutoML search budget per job
     RANDOM_STATE: int = 42
 
+    # ── LLM (OpenAI-compatible: OpenAI, Groq, OpenRouter, Together, local) ──
+    LLM_API_KEY: str = ""
+    LLM_MODEL: str = "gpt-4o-mini"
+    LLM_BASE_URL: str = ""              # blank = OpenAI default; set for Groq/OpenRouter
+
     # ── CORS ───────────────────────────────────────────────────────────────
     ALLOWED_ORIGINS: list[str] = ["*"]
 

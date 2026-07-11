@@ -8,5 +8,6 @@ scikit-learn
 flaml[automl]
 joblib
 openpyxl
+openai
 pytest
 httpx

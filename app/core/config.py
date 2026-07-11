@@ -28,9 +28,10 @@ class Settings(BaseSettings):
     RANDOM_STATE: int = 42
 
     # ── LLM (OpenAI-compatible: OpenAI, Groq, OpenRouter, Together, local) ──
-    LLM_API_KEY: str = ""
+    LLM_API_KEYS: str = ""             # comma-separated; round-robined per call
+    LLM_API_KEY: str = ""              # single key (used if LLM_API_KEYS is blank)
     LLM_MODEL: str = "gpt-4o-mini"
-    LLM_BASE_URL: str = ""              # blank = OpenAI default; set for Groq/OpenRouter
+    LLM_BASE_URL: str = ""             # blank = OpenAI default; set for Groq/OpenRouter
 
     # ── Embeddings (for semantic dataset-search ranking) ───────────────────
     EMBED_MODEL: str = "text-embedding-3-small"

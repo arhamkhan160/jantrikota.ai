@@ -1,8 +1,14 @@
 # 🗺️ Build Plan — jantrikota.ai (AutoML Agent)
 
-> **Status (2026-07-11): M0–M6 all shipped and validated — 27/27 tests green in Docker.**
-> Branch `build/automl-mvp`. One commit per milestone (M1→M6). Deferred items below
-> remain intentionally unbuilt (featuretools, Celery, MLflow, UI).
+> **Status (2026-07-11): M0–M8 shipped and validated — 39/39 tests green in Docker.**
+> Branch `build/automl-mvp`. One commit per milestone.
+> - M1 FLAML pipeline · M2 NLP→TaskSpec · M3 profiler · M4 validation agent
+> - M5(+) OpenML fetch + ranked two-step search · M6 /predict
+> - M7 supervisor agent (agentic end-to-end) · M8 multi-source (OpenML/HF/Kaggle/URL)
+>
+> Deferred, intentionally unbuilt: featuretools, Celery/Redis multi-worker,
+> MLflow, UI, arbitrary-page web scraping (URL/table source built instead),
+> LLM-driven ReAct tool routing (deterministic supervisor built instead).
 
 Actionable checklist. Blueprint lives in [Readme.md](Readme.md). Rule: **each milestone RUNS end-to-end before the next starts.** Vertical slices, not horizontal layers. Tick the box only when its acceptance check passes.
 

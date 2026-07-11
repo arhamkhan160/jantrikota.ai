@@ -10,6 +10,7 @@ joblib
 openpyxl
 openai
 langgraph
+PyJWT
 openml
 datasets
 huggingface_hub

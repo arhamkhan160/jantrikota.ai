@@ -38,6 +38,11 @@ class Settings(BaseSettings):
     EMBED_API_KEY: str = ""             # blank = reuse LLM_API_KEY
     EMBED_BASE_URL: str = ""            # blank = reuse LLM_BASE_URL
 
+    # ── Auth (Supabase) ────────────────────────────────────────────────────
+    SUPABASE_URL: str = ""              # https://<project>.supabase.co (for login/signup proxy)
+    SUPABASE_ANON_KEY: str = ""         # anon/public key (for login/signup proxy)
+    SUPABASE_JWT_SECRET: str = ""       # Settings > API > JWT Secret (HS256) — verifies tokens
+
     # ── CORS ───────────────────────────────────────────────────────────────
     ALLOWED_ORIGINS: list[str] = ["*"]
 
